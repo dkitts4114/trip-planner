@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trip-planner"
+version = "0.1.0"
+description = "Personal automated trip-planning tool"
+requires-python = ">=3.10"
+readme = "../README.md"
+license = { text = "MIT" }
+authors = [{ name = "Daniel Kitts" }]
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "pydantic>=2.8",
+  "pydantic-settings>=2.5",
+  "python-dotenv>=1.0",
+  "flights>=0.3",            # punitarani/fli package on PyPI
+  "amadeus>=11.0",           # Amadeus Self-Service SDK
+  "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+  "httpx>=0.27",
+  "ruff>=0.7",
+  "respx>=0.21",             # HTTPX mock for API tests
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
