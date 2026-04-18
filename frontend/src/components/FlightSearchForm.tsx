@@ -8,6 +8,9 @@ import type {
 
 interface Props {
   defaultOrigin?: string;
+  defaultAdults?: number;
+  defaultCabin?: CabinClass;
+  defaultMaxStops?: MaxStopsOption;
   onSubmit: (req: FlightSearchRequest) => void;
   submitting: boolean;
 }
@@ -18,15 +21,22 @@ function todayPlus(days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-export function FlightSearchForm({ defaultOrigin = "SFO", onSubmit, submitting }: Props) {
+export function FlightSearchForm({
+  defaultOrigin = "SFO",
+  defaultAdults = 1,
+  defaultCabin = "economy",
+  defaultMaxStops = "any",
+  onSubmit,
+  submitting,
+}: Props) {
   const [origin, setOrigin] = useState(defaultOrigin);
   const [destination, setDestination] = useState("PHX");
   const [departureDate, setDepartureDate] = useState(todayPlus(30));
   const [roundTrip, setRoundTrip] = useState(false);
   const [returnDate, setReturnDate] = useState(todayPlus(37));
-  const [adults, setAdults] = useState(1);
-  const [cabin, setCabin] = useState<CabinClass>("economy");
-  const [maxStops, setMaxStops] = useState<MaxStopsOption>("any");
+  const [adults, setAdults] = useState(defaultAdults);
+  const [cabin, setCabin] = useState<CabinClass>(defaultCabin);
+  const [maxStops, setMaxStops] = useState<MaxStopsOption>(defaultMaxStops);
   const [sortBy, setSortBy] = useState<SortOption>("cheapest");
 
   function handle(e: React.FormEvent) {
