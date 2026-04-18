@@ -5,7 +5,7 @@ import {
   type FlightSearchResponse,
 } from "./lib/api";
 import { FlightSearchForm } from "./components/FlightSearchForm";
-import { SourcePanel } from "./components/FlightResultsTable";
+import { FlightResultsTable } from "./components/FlightResultsTable";
 
 type Health = { status: string; version: string };
 
@@ -38,10 +38,8 @@ export function App() {
     }
   }
 
-  const isRoundTrip = Boolean(response?.request?.return_date);
-
   return (
-    <main style={{ fontFamily: "system-ui", padding: 24, maxWidth: 1280, margin: "0 auto" }}>
+    <main style={{ fontFamily: "system-ui", padding: 24, maxWidth: 1000, margin: "0 auto" }}>
       <header style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
         <h1 style={{ margin: 0 }}>trip-planner</h1>
         <small style={{ color: "#888" }}>
@@ -52,9 +50,9 @@ export function App() {
               : `backend: …`}
         </small>
       </header>
-      <p style={{ color: "#555", marginTop: 6 }}>
-        Flight search via <strong>Google Flights (fli)</strong> and <strong>Amadeus</strong> side-by-side.
-        Points math, hotel lookup, and deal alerts coming in later increments.
+      <p style={{ color: "#555" }}>
+        Flight search via <strong>Google Flights</strong>. Points math, hotel lookup, and deal
+        alerts coming in later increments.
       </p>
 
       <section style={{ marginTop: 16 }}>
@@ -66,18 +64,19 @@ export function App() {
       )}
 
       {response && (
-        <div
-          style={{
-            display: "flex",
-            gap: 24,
-            marginTop: 24,
-            alignItems: "flex-start",
-            flexWrap: "wrap",
-          }}
-        >
-          <SourcePanel source="fli" result={response.fli} isRoundTrip={isRoundTrip} />
-          <SourcePanel source="amadeus" result={response.amadeus} isRoundTrip={isRoundTrip} />
-        </div>
+        <>
+          {response.warnings.length > 0 && (
+            <ul style={{ color: "#b45309", marginTop: 16 }}>
+              {response.warnings.map((w, i) => (
+                <li key={i}>{w}</li>
+              ))}
+            </ul>
+          )}
+          <FlightResultsTable title="Outbound" itineraries={response.outbound} />
+          {response.ret && (
+            <FlightResultsTable title="Return" itineraries={response.ret} />
+          )}
+        </>
       )}
     </main>
   );

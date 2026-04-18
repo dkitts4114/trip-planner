@@ -75,18 +75,11 @@ class FlightItinerary(BaseModel):
     legs: list[FlightLeg]
 
 
-class SourceResult(BaseModel):
-    """Results from a single flight data source (fli or Amadeus)."""
-
-    outbound: list[FlightItinerary] = Field(default_factory=list)
+class FlightSearchResponse(BaseModel):
+    request: FlightSearchRequest
+    outbound: list[FlightItinerary]
     ret: list[FlightItinerary] | None = Field(
         default=None, description="Return-leg options when round-trip requested"
     )
-    available: bool = True
+    source: str = "fli"
     warnings: list[str] = Field(default_factory=list)
-
-
-class FlightSearchResponse(BaseModel):
-    request: FlightSearchRequest
-    fli: SourceResult
-    amadeus: SourceResult

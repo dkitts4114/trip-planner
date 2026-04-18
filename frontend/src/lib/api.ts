@@ -36,17 +36,12 @@ export interface FlightItinerary {
   legs: FlightLeg[];
 }
 
-export interface SourceResult {
-  outbound: FlightItinerary[];
-  ret: FlightItinerary[] | null;
-  available: boolean;
-  warnings: string[];
-}
-
 export interface FlightSearchResponse {
   request: FlightSearchRequest;
-  fli: SourceResult;
-  amadeus: SourceResult;
+  outbound: FlightItinerary[];
+  ret: FlightItinerary[] | null;
+  source: string;
+  warnings: string[];
 }
 
 export async function searchFlights(
